@@ -1,5 +1,5 @@
 {
-	"name": "baufragen/baufragen-internal-sdk",
+	"name": "baufragen/internal-sdk",
 	"description": "Handles internal requests to the Baufragen API for things like account creation",
 	"authors": [
 		{
