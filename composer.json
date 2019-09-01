@@ -19,7 +19,7 @@
 	"extra": {
 		"laravel": {
 			"providers": [
-				"Baufragen\\SDK\\BaufragenSdkServiceProvider"
+				"Baufragen\\Sdk\\BaufragenSdkServiceProvider"
 			]
 		}
 	}
