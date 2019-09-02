@@ -19,8 +19,8 @@ class BaufragenSdkServiceProvider extends ServiceProvider {
 
     public function register()
     {
-        $this->app->singleton('baufragen.container', function() {
-            return new DataSyncContainer();
+        $this->app->singleton('baufragen.userService', function() {
+            return new UserService();
         });
     }
 
