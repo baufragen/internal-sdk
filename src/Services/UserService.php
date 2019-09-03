@@ -8,14 +8,15 @@ use \GuzzleHttp\Exception\RequestException;
 use \Illuminate\Validation\ValidationException;
 
 class UserService {
-    public function registerUser($email, $password, $additional = []) {
+    public function registerUser($email, $password, $origin, $additional = []) {
         /** @var BaufragenClient $client */
         $client = app(BaufragenClient::class);
 
         try {
             $response = $client->post('/auth/register', array_merge([
-                'email' => $email,
-                'password' => $password,
+                'email'     => $email,
+                'password'  => $password,
+                'origin'    => $origin,
             ], $additional), [
                 'headers' => [
                     'Accept'    => 'application/json',
