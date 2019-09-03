@@ -34,7 +34,7 @@ class UserService {
                     throw ValidationException::withMessages(json_decode($response->getContent(), true)['errors']);
                 }
 
-                throw new RegisterException("Error during registration");
+                throw new RegisterException("Error during registration: " . $response->getContent());
             }
         }
     }
