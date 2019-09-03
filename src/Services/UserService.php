@@ -31,10 +31,10 @@ class UserService {
                 $response = $e->getResponse();
 
                 if ($response->getStatusCode() === 422) {
-                    throw ValidationException::withMessages(json_decode($response->getContent(), true)['errors']);
+                    throw ValidationException::withMessages(json_decode($response->getBody(), true)['errors']);
                 }
 
-                throw new RegisterException("Error during registration: " . $response->getContent());
+                throw new RegisterException("Error during registration: " . $response->getBody());
             }
         }
     }
