@@ -13,11 +13,12 @@ class UserService {
         $client = app(BaufragenClient::class);
 
         try {
-            $response = $client->post('auth/register', array_merge([
-                'email'     => $email,
-                'password'  => $password,
-                'origin'    => $origin,
-            ], $additional), [
+            $response = $client->request('POST', 'auth/register', [
+                'form_params' => array_merge([
+                    'email'     => $email,
+                    'password'  => $password,
+                    'origin'    => $origin,
+                ], $additional),
                 'headers' => [
                     'Accept'    => 'application/json',
                 ],
