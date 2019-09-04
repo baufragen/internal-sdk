@@ -13,7 +13,7 @@ class UserService {
         $client = app(BaufragenClient::class);
 
         try {
-            $response = $client->post('/auth/register', array_merge([
+            $response = $client->post('auth/register', array_merge([
                 'email'     => $email,
                 'password'  => $password,
                 'origin'    => $origin,
@@ -23,9 +23,11 @@ class UserService {
                 ],
             ]);
 
-            if ($response->getStatusCode() === 201) {
+            if (in_array($response->getStatusCode(), [200, 201])) {
                 return true;
             }
+
+            return false;
         } catch (RequestException $e) {
             if ($e->hasResponse()) {
                 $response = $e->getResponse();
@@ -34,7 +36,7 @@ class UserService {
                     throw ValidationException::withMessages(json_decode($response->getBody(), true)['errors']);
                 }
 
-                throw new RegisterException("Error during registration: " . $response->getBody());
+                throw new RegisterException("Error during registration: " . $response->getStatusCode() . " - " . $response->getBody());
             }
         }
     }
