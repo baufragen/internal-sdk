@@ -25,7 +25,7 @@ class UserUpdater {
         /** @var UserService $service */
         $service = app(UserService::class);
 
-        $service->executeUpdateUser($this);
+        return $service->executeUpdateUser($this);
     }
 
     public function getData() {
