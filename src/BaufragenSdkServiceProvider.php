@@ -2,6 +2,7 @@
 
 namespace Baufragen\Sdk;
 
+use Baufragen\Sdk\Services\UserService;
 use Illuminate\Support\ServiceProvider;
 
 class BaufragenSdkServiceProvider extends ServiceProvider {
