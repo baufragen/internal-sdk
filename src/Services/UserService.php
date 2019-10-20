@@ -56,7 +56,7 @@ class UserService {
 
         try {
 
-            $response = $client->request('POST', 'user/update', [
+            $response = $client->request('PUT', 'user/update', [
                 'form_params' => $userUpdater->getData(),
                 'headers' => [
                     'Accept'    => 'application/json',
