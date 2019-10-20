@@ -55,4 +55,8 @@ class UserUpdater {
     public function getData() {
         return $this->data;
     }
+
+    public function getUser() {
+        return $this->id;
+    }
 }
