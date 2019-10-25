@@ -3,6 +3,7 @@
 namespace Baufragen\Sdk\Services;
 
 use Baufragen\Sdk\Client\BaufragenClient;
+use Baufragen\Sdk\Exceptions\DeleteUserException;
 use Baufragen\Sdk\Exceptions\RegisterException;
 use Baufragen\Sdk\Exceptions\UpdateUserException;
 use Baufragen\Sdk\User\UserUpdater;
@@ -191,6 +192,30 @@ class UserService {
                 }
 
                 throw new UpdateUserException("Error during update of userdata:" . $response->getStatusCode() . " - " . (string)$response->getBody());
+            }
+        }
+    }
+
+    public function deleteUser($userId) {
+        try {
+
+            $response = $this->client->request('DELETE', 'user/' . $userId);
+
+            if (in_array($response->getStatusCode(), [200, 201])) {
+                return true;
+            }
+
+            return false;
+
+        } catch (RequestException $e) {
+            if ($e->hasResponse()) {
+                $response = $e->getResponse();
+
+                if ($response->getStatusCode() === 422) {
+                    throw ValidationException::withMessages(json_decode($response->getBody(), true)['errors']);
+                }
+
+                throw new DeleteUserException($response->getStatusCode() . " - " . (string)$response->getBody());
             }
         }
     }
