@@ -4,6 +4,7 @@ namespace Baufragen\Sdk\Services;
 
 use Baufragen\Sdk\Client\BaufragenClient;
 use Baufragen\Sdk\Exceptions\DeleteUserException;
+use Baufragen\Sdk\Exceptions\LoginTokenException;
 use Baufragen\Sdk\Exceptions\RegisterException;
 use Baufragen\Sdk\Exceptions\UpdateUserException;
 use Baufragen\Sdk\User\UserUpdater;
@@ -16,6 +17,25 @@ class UserService {
 
     public function __construct() {
         $this->client = app(BaufragenClient::class);
+    }
+
+    public function requestLoginToken($userId) {
+        try {
+
+            /** @var Response $response */
+            $response = $this->client->request('GET', 'user/' . $userId . '/login-token');
+
+            if (!$this->responseIsSuccessful($response)) {
+                return false;
+            }
+
+            $responseData = json_decode($response->getBody(), true);
+
+            return !empty($responseData['token']) ? $responseData['token'] : null;
+
+        } catch (RequestException $e) {
+            $this->handleRequestException($e, LoginTokenException::class);
+        }
     }
 
     public function registerUser($email, $password, $origin, $additional = []) {
@@ -32,22 +52,10 @@ class UserService {
                 ],
             ]);
 
-            if (in_array($response->getStatusCode(), [200, 201])) {
-                return true;
-            }
-
-            return false;
+            return $this->responseIsSuccessful($response);
 
         } catch (RequestException $e) {
-            if ($e->hasResponse()) {
-                $response = $e->getResponse();
-
-                if ($response->getStatusCode() === 422) {
-                    throw ValidationException::withMessages(json_decode($response->getBody(), true)['errors']);
-                }
-
-                throw new RegisterException("Error during registration: " . $response->getStatusCode() . " - " . $response->getBody());
-            }
+            $this->handleRequestException($e, RegisterException::class);
         }
     }
 
@@ -64,22 +72,10 @@ class UserService {
                 ]
             ]);
 
-            if (in_array($response->getStatusCode(), [200, 201])) {
-                return true;
-            }
-
-            return false;
+            return $this->responseIsSuccessful($response);
 
         } catch (RequestException $e) {
-            if ($e->hasResponse()) {
-                $response = $e->getResponse();
-
-                if ($response->getStatusCode() === 422) {
-                    throw ValidationException::withMessages(json_decode($response->getBody(), true)['errors']);
-                }
-
-                throw new UpdateUserException("Error during upload of avatar:" . $response->getStatusCode() . " - " . (string)$response->getBody());
-            }
+            $this->handleRequestException($e, UpdateUserException::class);
         }
     }
 
@@ -88,22 +84,10 @@ class UserService {
 
             $response = $this->client->request('DELETE', 'user/' . $userId . '/avatar');
 
-            if (in_array($response->getStatusCode(), [200, 201])) {
-                return true;
-            }
-
-            return false;
+            return $this->responseIsSuccessful($response);
 
         } catch (RequestException $e) {
-            if ($e->hasResponse()) {
-                $response = $e->getResponse();
-
-                if ($response->getStatusCode() === 422) {
-                    throw ValidationException::withMessages(json_decode($response->getBody(), true)['errors']);
-                }
-
-                throw new UpdateUserException("Error during deletion of avatar:" . $response->getStatusCode() . " - " . (string)$response->getBody());
-            }
+            $this->handleRequestException($e, UpdateUserException::class);
         }
     }
 
@@ -117,21 +101,10 @@ class UserService {
                 ],
             ]);
 
-            if (in_array($response->getStatusCode(), [200, 201])) {
-                return true;
-            }
+            return $this->responseIsSuccessful($response);
 
-            return false;
         } catch (RequestException $e) {
-            if ($e->hasResponse()) {
-                $response = $e->getResponse();
-
-                if ($response->getStatusCode() === 422) {
-                    throw ValidationException::withMessages(json_decode($response->getBody(), true)['errors']);
-                }
-
-                throw new UpdateUserException("Error during update of email:" . $response->getStatusCode() . " - " . (string)$response->getBody());
-            }
+            $this->handleRequestException($e, UpdateUserException::class);
         }
     }
 
@@ -145,21 +118,10 @@ class UserService {
                 ],
             ]);
 
-            if (in_array($response->getStatusCode(), [200, 201])) {
-                return true;
-            }
+            return $this->responseIsSuccessful($response);
 
-            return false;
         } catch (RequestException $e) {
-            if ($e->hasResponse()) {
-                $response = $e->getResponse();
-
-                if ($response->getStatusCode() === 422) {
-                    throw ValidationException::withMessages(json_decode($response->getBody(), true)['errors']);
-                }
-
-                throw new UpdateUserException("Error during update of email:" . $response->getStatusCode() . " - " . (string)$response->getBody());
-            }
+            $this->handleRequestException($e, UpdateUserException::class);
         }
     }
 
@@ -177,22 +139,10 @@ class UserService {
                 ],
             ]);
 
-            if (in_array($response->getStatusCode(), [200, 201])) {
-                return true;
-            }
-
-            return false;
+            return $this->responseIsSuccessful($response);
 
         } catch (RequestException $e) {
-            if ($e->hasResponse()) {
-                $response = $e->getResponse();
-
-                if ($response->getStatusCode() === 422) {
-                    throw ValidationException::withMessages(json_decode($response->getBody(), true)['errors']);
-                }
-
-                throw new UpdateUserException("Error during update of userdata:" . $response->getStatusCode() . " - " . (string)$response->getBody());
-            }
+            $this->handleRequestException($e, UpdateUserException::class);
         }
     }
 
@@ -201,22 +151,26 @@ class UserService {
 
             $response = $this->client->request('DELETE', 'user/' . $userId);
 
-            if (in_array($response->getStatusCode(), [200, 201])) {
-                return true;
-            }
-
-            return false;
+            return $this->responseIsSuccessful($response);
 
         } catch (RequestException $e) {
-            if ($e->hasResponse()) {
-                $response = $e->getResponse();
+            $this->handleRequestException($e, DeleteUserException::class);
+        }
+    }
 
-                if ($response->getStatusCode() === 422) {
-                    throw ValidationException::withMessages(json_decode($response->getBody(), true)['errors']);
-                }
+    protected function responseIsSuccessful($response) {
+        return in_array($response->getStatusCode(), [200, 201]);
+    }
 
-                throw new DeleteUserException($response->getStatusCode() . " - " . (string)$response->getBody());
+    protected function handleRequestException(RequestException $e, $exceptionClass) {
+        if ($e->hasResponse()) {
+            $response = $e->getResponse();
+
+            if ($response->getStatusCode() === 422) {
+                throw ValidationException::withMessages(json_decode($response->getBody(), true)['errors']);
             }
+
+            throw new $exceptionClass("Error: " . $response->getStatusCode() . " - " . (string)$response->getBody());
         }
     }
 }
