@@ -22,7 +22,9 @@ class SpotService extends BaseService {
                 return false;
             }
 
-            return json_decode($response->getBody(), true);
+            $responseData = json_decode($response->getBody(), true);
+
+            return !empty($responseData['data']) ? $responseData['data'] : null;
 
         } catch (RequestException $e) {
             $this->handleRequestException($e, LoginTokenException::class);
