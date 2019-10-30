@@ -11,7 +11,7 @@ use Baufragen\Sdk\User\UserUpdater;
 use \GuzzleHttp\Exception\RequestException;
 use \Illuminate\Validation\ValidationException;
 
-class UserService {
+class UserService extends BaseService {
     /** @var BaufragenClient $client */
     protected $client;
 
@@ -155,22 +155,6 @@ class UserService {
 
         } catch (RequestException $e) {
             $this->handleRequestException($e, DeleteUserException::class);
-        }
-    }
-
-    protected function responseIsSuccessful($response) {
-        return in_array($response->getStatusCode(), [200, 201]);
-    }
-
-    protected function handleRequestException(RequestException $e, $exceptionClass) {
-        if ($e->hasResponse()) {
-            $response = $e->getResponse();
-
-            if ($response->getStatusCode() === 422) {
-                throw ValidationException::withMessages(json_decode($response->getBody(), true)['errors']);
-            }
-
-            throw new $exceptionClass("Error: " . $response->getStatusCode() . " - " . (string)$response->getBody());
         }
     }
 }
