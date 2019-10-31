@@ -8,7 +8,7 @@ class SdkRequestsOnly
 {
     public function handle($request, Closure $next)
     {
-        if ($request->header('baufragen_sdk_apikey', null) != config('baufragensdk.apikey')) {
+        if ($request->header('x-baufragen_sdk_apikey', null) != config('baufragensdk.apikey')) {
             abort(403, "Wrong ApiKey");
         }
 
