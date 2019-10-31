@@ -9,6 +9,9 @@ class BaufragenClient extends Client {
     {
         $config = [
             'base_uri'  => config('baufragensdk.baufragen.api.baseurl'),
+            'headers'   => [
+                'baufragen_sdk_apikey'  => config('baufragensdk.apikey'),
+            ],
             'verify'    => false, // TODO: make this configurable
         ];
 
