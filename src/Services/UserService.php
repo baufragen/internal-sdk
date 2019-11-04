@@ -52,7 +52,13 @@ class UserService extends BaseService {
                 ],
             ]);
 
-            return $this->responseIsSuccessful($response);
+            if (!$this->responseIsSuccessful($response)) {
+                return false;
+            }
+
+            $responseData = json_decode($response->getBody(), true);
+
+            return !empty($responseData['user']) ? $responseData['user'] : null;
 
         } catch (RequestException $e) {
             $this->handleRequestException($e, RegisterException::class);
