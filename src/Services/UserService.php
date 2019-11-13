@@ -5,6 +5,7 @@ namespace Baufragen\Sdk\Services;
 use Baufragen\Sdk\Client\BaufragenClient;
 use Baufragen\Sdk\Exceptions\DeleteUserException;
 use Baufragen\Sdk\Exceptions\LoginTokenException;
+use Baufragen\Sdk\Exceptions\OptinUserException;
 use Baufragen\Sdk\Exceptions\RegisterException;
 use Baufragen\Sdk\Exceptions\UpdateUserException;
 use Baufragen\Sdk\User\UserUpdater;
@@ -161,6 +162,17 @@ class UserService extends BaseService {
 
         } catch (RequestException $e) {
             $this->handleRequestException($e, DeleteUserException::class);
+        }
+    }
+
+    public function optinUser($userId, $origin) {
+        try {
+
+            $response = $this->client->request('POST', 'user/' . $userId . '/optin');
+
+            return $this->responseIsSuccessful($response);
+        } catch (RequestException $e) {
+            $this->handleRequestException($e, OptinUserException::class);
         }
     }
 }
