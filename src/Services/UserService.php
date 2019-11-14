@@ -39,14 +39,15 @@ class UserService extends BaseService {
         }
     }
 
-    public function registerUser($email, $password, $origin, $additional = []) {
+    public function registerUser($email, $password, $origin, $sendRegistrationMail = true, $additional = []) {
         try {
 
             $response = $this->client->request('POST', 'auth/register', [
                 'form_params' => array_merge([
-                    'email'     => $email,
-                    'password'  => $password,
-                    'origin'    => $origin,
+                    'email'         => $email,
+                    'password'      => $password,
+                    'origin'        => $origin,
+                    'register_mail' => $sendRegistrationMail,
                 ], $additional),
                 'headers' => [
                     'Accept'    => 'application/json',
