@@ -3,6 +3,7 @@
 namespace Baufragen\Sdk\Services;
 
 use Baufragen\Sdk\Client\BauspotClient;
+use GuzzleHttp\Exception\ClientException;
 
 class SpotService extends BaseService {
     /** @var BaufragenClient $client */
@@ -27,8 +28,13 @@ class SpotService extends BaseService {
             return !empty($responseData['data']) ? $responseData['data'] : null;
 
         } catch (RequestException $e) {
-            dd($e);
-            $this->handleRequestException($e, LoginTokenException::class);
+            $this->handleRequestException($e, \Exception::class);
+        } catch (ClientException $e) {
+            if ($e->getResponse()->getStatusCode() == 404) {
+                return false;
+            } else {
+                $this->handleRequestException($e, \Exception::class);
+            }
         }
     }
 }
