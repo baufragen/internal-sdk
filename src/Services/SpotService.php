@@ -27,6 +27,7 @@ class SpotService extends BaseService {
             return !empty($responseData['data']) ? $responseData['data'] : null;
 
         } catch (RequestException $e) {
+            dd($e);
             $this->handleRequestException($e, LoginTokenException::class);
         }
     }
