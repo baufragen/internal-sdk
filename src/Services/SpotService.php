@@ -37,4 +37,27 @@ class SpotService extends BaseService {
             }
         }
     }
+
+    public function getLatestSpots($count = 5) {
+        try {
+
+            /** @var Response $response */
+            $response = $this->client->request('GET', 'internal/spots/latest', [
+                'query' => [
+                    'count' => $count,
+                ],
+            ]);
+
+            if (!$this->responseIsSuccessful($response)) {
+                return false;
+            }
+
+            $responseData = json_decode($response->getBody(), true);
+
+            return !empty($responseData['data']) ? $responseData['data'] : null;
+
+        } catch (RequestException $e) {
+            $this->handleRequestException($e, \Exception::class);
+        }
+    }
 }
