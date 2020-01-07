@@ -15,6 +15,10 @@ class BaufragenClient extends Client {
             'verify'    => false, // TODO: make this configurable
         ];
 
+        if (!empty(config('baufragensdk.baufragen.auth.user')) && !empty(config('baufragensdk.baufragen.auth.password'))) {
+            $config['auth'] = [config('baufragensdk.baufragen.auth.user'), config('baufragensdk.baufragen.auth.password')];
+        }
+
         parent::__construct($config);
     }
 }

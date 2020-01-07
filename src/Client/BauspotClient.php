@@ -15,6 +15,10 @@ class BauspotClient extends Client {
             'verify'    => false, // TODO: make this configurable
         ];
 
+        if (!empty(config('baufragensdk.bauspot.auth.user')) && !empty(config('baufragensdk.bauspot.auth.password'))) {
+            $config['auth'] = [config('baufragensdk.bauspot.auth.user'), config('baufragensdk.bauspot.auth.password')];
+        }
+
         parent::__construct($config);
     }
 }
