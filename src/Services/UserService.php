@@ -7,6 +7,7 @@ use Baufragen\Sdk\Exceptions\DeleteUserException;
 use Baufragen\Sdk\Exceptions\LoginTokenException;
 use Baufragen\Sdk\Exceptions\OptinUserException;
 use Baufragen\Sdk\Exceptions\RegisterException;
+use Baufragen\Sdk\Exceptions\RegisterLoginException;
 use Baufragen\Sdk\Exceptions\UpdateUserException;
 use Baufragen\Sdk\User\UserUpdater;
 use \GuzzleHttp\Exception\RequestException;
@@ -174,6 +175,25 @@ class UserService extends BaseService {
             return $this->responseIsSuccessful($response);
         } catch (RequestException $e) {
             $this->handleRequestException($e, OptinUserException::class);
+        }
+    }
+
+    public function registerLogin($userId, $origin, $origin_model_id = null) {
+        try {
+
+            $response = $this->client->request('POST', 'user/' . $userId . '/login', [
+                'json' => [
+                    'origin'            => $origin,
+                    'origin_model_id'   => $origin_model_id,
+                ],
+                'headers' => [
+                    'Accept' => 'application/json',
+                ],
+            ]);
+
+            return $this->responseIsSuccessful($response);
+        } catch (RequestException $e) {
+            $this->handleRequestException($e, RegisterLoginException::class);
         }
     }
 }
