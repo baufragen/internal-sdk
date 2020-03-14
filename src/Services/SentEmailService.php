@@ -30,7 +30,7 @@ class SentEmailService extends BaseService {
 
             $responseData = json_decode($response->getBody(), true);
 
-            return $responseData['data']['id'] ?? null;
+            return $responseData['data'];
         } catch (RequestException $e) {
             $this->handleRequestException($e, \Exception::class);
         }
