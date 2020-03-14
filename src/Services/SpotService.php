@@ -6,7 +6,7 @@ use Baufragen\Sdk\Client\BauspotClient;
 use GuzzleHttp\Exception\ClientException;
 
 class SpotService extends BaseService {
-    /** @var BaufragenClient $client */
+    /** @var BauspotClient $client */
     protected $client;
 
     public function __construct() {
