@@ -17,9 +17,11 @@ class SentEmailService extends BaseService {
         try {
 
             /** @var Response $response */
-            $response = $this->client->request('POST', 'email-tracking/', [
-                'service'   => $service,
-                'type'      => $type,
+            $response = $this->client->request('POST', 'email-tracking', [
+                'form_params' => [
+                    'service'   => $service,
+                    'type'      => $type,
+                ],
             ]);
 
             if (!$this->responseIsSuccessful($response)) {
@@ -28,7 +30,7 @@ class SentEmailService extends BaseService {
 
             $responseData = json_decode($response->getBody(), true);
 
-            return $responseData;
+            return $responseData['data']['id'] ?? null;
         } catch (RequestException $e) {
             $this->handleRequestException($e, \Exception::class);
         }
