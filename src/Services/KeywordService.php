@@ -6,7 +6,7 @@ use Baufragen\Sdk\Client\BaufragenClient;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\RequestException;
 
-class CategoryService extends BaseService {
+class KeywordService extends BaseService {
     /** @var BaufragenClient $client */
     protected $client;
 
@@ -14,11 +14,11 @@ class CategoryService extends BaseService {
         $this->client = app(BaufragenClient::class);
     }
 
-    public function getAllCategories() {
+    public function getAllKeywords() {
         try {
 
             /** @var Response $response */
-            $response = $this->client->request('GET', 'category');
+            $response = $this->client->request('GET', 'keyword');
 
             if (!$this->responseIsSuccessful($response)) {
                 return false;
