@@ -4,6 +4,7 @@ namespace Baufragen\Sdk\Services;
 
 use Baufragen\Sdk\Client\BaufragenClient;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\RequestException;
 
 class SentEmailService extends BaseService {
     /** @var BaufragenClient $client */
@@ -41,9 +42,11 @@ class SentEmailService extends BaseService {
 
             /** @var Response $response */
             $response = $this->client->request('PUT', 'email-tracking/' . $sentEmailId, [
-                'email'         => $email,
-                'message_id'    => $messageId,
-                'user_id'       => $userId,
+                'form_params' => [
+                    'email'         => $email,
+                    'message_id'    => $messageId,
+                    'user_id'       => $userId,
+                ],
             ]);
 
             if (!$this->responseIsSuccessful($response)) {

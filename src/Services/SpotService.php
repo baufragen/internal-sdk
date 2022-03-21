@@ -4,6 +4,7 @@ namespace Baufragen\Sdk\Services;
 
 use Baufragen\Sdk\Client\BauspotClient;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\RequestException;
 
 class SpotService extends BaseService {
     /** @var BauspotClient $client */
