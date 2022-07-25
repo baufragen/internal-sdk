@@ -2,6 +2,7 @@
 
 namespace Baufragen\Sdk;
 
+use Baufragen\Sdk\Services\OnboardingService;
 use Baufragen\Sdk\Services\UserService;
 use Illuminate\Support\ServiceProvider;
 
@@ -22,6 +23,10 @@ class BaufragenSdkServiceProvider extends ServiceProvider {
     {
         $this->app->singleton('baufragen.userService', function() {
             return new UserService();
+        });
+
+        $this->app->singleton('baufragen.onboardingService', function() {
+            return new OnboardingService();
         });
     }
 
