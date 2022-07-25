@@ -18,7 +18,7 @@ class OnboardingService extends BaseService {
         try {
 
             $response = $this->client->request('GET', 'onboarding/email-exists', [
-                'params' => [
+                'query' => [
                     'email' => $email,
                 ],
             ]);
