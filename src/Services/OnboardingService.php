@@ -23,7 +23,7 @@ class OnboardingService extends BaseService {
                 ],
             ]);
 
-            $responseData = json_decode($response->getContent(), true);
+            $responseData = json_decode($response->getBody(), true);
 
             return !empty($responseData['exists']);
 
