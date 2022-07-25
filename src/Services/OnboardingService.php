@@ -3,15 +3,8 @@
 namespace Baufragen\Sdk\Services;
 
 use Baufragen\Sdk\Client\BaufragenClient;
-use Baufragen\Sdk\Exceptions\DeleteUserException;
-use Baufragen\Sdk\Exceptions\LoginTokenException;
-use Baufragen\Sdk\Exceptions\OptinUserException;
-use Baufragen\Sdk\Exceptions\RegisterException;
-use Baufragen\Sdk\Exceptions\RegisterLoginException;
-use Baufragen\Sdk\Exceptions\UpdateUserException;
-use Baufragen\Sdk\User\UserUpdater;
+use Baufragen\Sdk\Exceptions\EmailExistsException;
 use \GuzzleHttp\Exception\RequestException;
-use \Illuminate\Validation\ValidationException;
 
 class OnboardingService extends BaseService {
     /** @var BaufragenClient $client */
@@ -35,7 +28,7 @@ class OnboardingService extends BaseService {
             return !empty($responseData['exists']);
 
         } catch (RequestException $e) {
-            $this->handleRequestException($e, );
+            $this->handleRequestException($e, EmailExistsException::class);
         }
     }
 }
