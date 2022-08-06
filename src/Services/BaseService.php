@@ -21,4 +21,14 @@ abstract class BaseService {
             throw new $exceptionClass("Error: " . $response->getStatusCode() . " - " . (string)$response->getBody());
         }
     }
+
+    protected function getValueFromJsonResponse(string $key, $response) {
+        $responseData = json_decode($response->getBody(), true);
+
+        if (isset($responseData[$key])) {
+            return $responseData[$key];
+        }
+
+        return null;
+    }
 }
