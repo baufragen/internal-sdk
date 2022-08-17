@@ -4,7 +4,9 @@ namespace Baufragen\Sdk\Services;
 
 use Baufragen\Sdk\Client\BaufragenClient;
 use Baufragen\Sdk\Exceptions\EmailExistsException;
+use Baufragen\Sdk\Exceptions\Sync\CreateExpertException;
 use Baufragen\Sdk\Exceptions\Sync\CreateManufacturerException;
+use Baufragen\Sdk\Exceptions\Sync\DeleteAllExpertsException;
 use Baufragen\Sdk\Exceptions\Sync\UpdateManufacturerException;
 use \GuzzleHttp\Exception\RequestException;
 
@@ -60,5 +62,36 @@ class OnboardingService extends BaseService {
         } catch (RequestException $e) {
             $this->handleRequestException($e, UpdateManufacturerException::class);
         }
+    }
+
+    public function deleteAllExperts(int $manufacturerId) : bool {
+
+        try {
+
+            $response = $this->client->request('DELETE', 'onboarding/manufacturer/' . $manufacturerId . '/experts');
+
+            return $this->responseIsSuccessful($response);
+
+        } catch (RequestException $e) {
+            $this->handleRequestException($e, DeleteAllExpertsException::class);
+        }
+
+    }
+
+    public function createExpert(int $manufacturerId, array $expertData) : bool {
+
+        try {
+
+            // TODO: find out how to send profileimage
+            $response = $this->client->request('POST', 'onboarding/manufacturer/' . $manufacturerId . '/expert', [
+                'form_params' => $expertData,
+            ]);
+
+            return $this->responseIsSuccessful($response);
+
+        } catch (RequestException $e) {
+            $this->handleRequestException($e, CreateExpertException::class);
+        }
+
     }
 }
