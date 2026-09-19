@@ -170,7 +170,14 @@ class UserService extends BaseService {
     public function optinUser($userId, $origin) {
         try {
 
-            $response = $this->client->request('POST', 'user/' . $userId . '/optin');
+            $response = $this->client->request('POST', 'user/' . $userId . '/optin', [
+                'json' => [
+                    'origin' => $origin,
+                ],
+                'headers' => [
+                    'Accept' => 'application/json',
+                ],
+            ]);
 
             return $this->responseIsSuccessful($response);
         } catch (RequestException $e) {
