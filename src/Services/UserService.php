@@ -167,7 +167,7 @@ class UserService extends BaseService {
         }
     }
 
-    public function optinUser($userId, $origin) {
+    public function optinUser($userId, $origin = 'bauspot') {
         try {
 
             $response = $this->client->request('POST', 'user/' . $userId . '/optin', [
