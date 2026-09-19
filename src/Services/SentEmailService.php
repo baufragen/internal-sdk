@@ -36,7 +36,7 @@ class SentEmailService extends BaseService {
         }
     }
 
-    public function updateTrackableEmail(int $sentEmailId, string $email, string $messageId, int $userId = null) {
+    public function updateTrackableEmail(int $sentEmailId, string $email, string $messageId, ?int $userId = null) {
         try {
 
             /** @var Response $response */
